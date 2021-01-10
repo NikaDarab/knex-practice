@@ -1,2 +1,5 @@
-const knex = require("knex");
-const ShoppingService = require("../src/shopping-list-service");
+describe(`Shopping-list service object`, () => {
+  it(`Should run the tests`, () => {
+    expect(true).to.eql(false);
+  });
+});
