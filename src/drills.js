@@ -29,20 +29,29 @@ const itemsAddedAfter = (daysAgo) => {
   knexInstance
     .select("name", "price")
 
-    .count("date_added AS days")
+    .from("shopping_list")
     .where(
       "date_added",
       ">",
       knexInstance.raw("now()-'?? days'::INTERVAL", daysAgo)
     )
+    .then((result) => {
+      console.log(`Products added ${daysAgo} days ago`);
+      console.log(result);
+    });
+};
+
+const totalCost = () => {
+  knexInstance
+    .select("category")
+    .sum("price as total")
     .from("shopping_list")
-    .groupBy("name", "price")
-    .orderBy([
-      { column: "name", order: "ASC" },
-      { column: "days", order: "DESC" },
-    ])
-    .then((result) => console.log(result));
+    .groupBy("category")
+    .then((result) => {
+      console.log(result);
+    });
 };
 // itemsWithText("fish");
 // paginateItems(2);
-itemsAddedAfter(21);
+// itemsAddedAfter(21);
+totalCost();
