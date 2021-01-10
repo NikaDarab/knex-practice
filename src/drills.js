@@ -13,4 +13,16 @@ const itemsWithText = (searchTerm) => {
     .where("name", "ILIKE", `%${searchTerm}%`)
     .then((result) => console.log(result));
 };
-itemsWithText("fish");
+
+const paginateItems = (pageNumber) => {
+  const itemsPerPage = 6;
+  const offset = itemsPerPage * (pageNumber - 1);
+  knexInstance
+    .select("shopping_list")
+    .from("shopping_list")
+    .limit(itemsPerPage)
+    .offset(offset)
+    .then((result) => console.log(result));
+};
+// itemsWithText("fish");
+paginateItems(2);
