@@ -2,7 +2,7 @@ const ShoppingService = require("../src/shopping-list-service");
 const knex = require("knex");
 const { expect } = require("chai");
 
-describe("Articles service object", function () {
+describe("shopping service object", function () {
   let db;
   let testItems = [
     {
@@ -40,18 +40,32 @@ describe("Articles service object", function () {
   afterEach(() => db("shopping_list").truncate());
   after(() => db.destroy());
   context("Given 'shopping_list' has data", () => {
-    before(() => {
+    beforeEach(() => {
       return db.into("shopping_list").insert(testItems);
     });
+  });
 
-    it("getAllItems() resolves all items from 'shopping_list table", () => {
-      return ShoppingService.getAllItems(db).then((actual) => {
-        expect(actual).to.eql(
-          testItems.map((item) => ({
-            ...item,
-            date_added: new Date(item.date_added),
-          }))
-        );
+  it("getAllItems() resolves all items from 'shopping_list table", () => {
+    return ShoppingService.getAllItems(db).then((actual) => {
+      expect(actual).to.eql(
+        testItems.map((item) => ({
+          ...item,
+          checked: false,
+        }))
+      );
+    });
+  });
+  it(`getById() resolved an item from 'shopping_list' table`, () => {
+    const thirdId = 3;
+    const thirdTestItem = testItems[thirdId - 1];
+    return ShoppingService.getById(db, thirdId).then((actual) => {
+      expect(actual).to.eql({
+        id: thirdId,
+        name: thirdTestItem.name,
+        price: thirdTestItem.price,
+        category: thirdTestItem.category,
+        checked: false,
+        date_added: thirdTestItem.date_added,
       });
     });
   });

@@ -12,5 +12,8 @@ const ShoppingService = {
         return rows[0];
       });
   },
+  getById(knex, id) {
+    return knex.from("shopping_list").select("*").where("id", id).first();
+  },
 };
 module.exports = ShoppingService;
