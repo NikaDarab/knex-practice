@@ -18,5 +18,8 @@ const ShoppingService = {
   deleteItem(knex, id) {
     return knex("shopping_list").where({ id }).delete();
   },
+  updateItem(knex, id, newItemFields) {
+    return knex("shopping_list").where({ id }).update(newItemFields);
+  },
 };
 module.exports = ShoppingService;

@@ -78,6 +78,24 @@ describe("shopping service object", function () {
           expect(allItems).to.eql(expected);
         });
     });
+    it("updateItem() updates an item from the 'shopping_item' table", () => {
+      const idOfItemToUpdate = 3;
+      const newItemData = {
+        name: "updated name",
+        price: "20.00",
+        category: "Main",
+        checked: false,
+        date_added: new Date(),
+      };
+      return ShoppingService.updateItem(db, idOfItemToUpdate, newItemData)
+        .then(() => ShoppingService.getById(db, idOfItemToUpdate))
+        .then((item) => {
+          expect(item).to.eql({
+            id: idOfItemToUpdate,
+            ...newItemData,
+          });
+        });
+    });
   });
   context("Given 'shopping_list' has no data", () => {
     it("getAllItems() resolved an empty array", () => {
