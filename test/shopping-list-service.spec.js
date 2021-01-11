@@ -61,5 +61,15 @@ describe("Articles service object", function () {
         expect(actual).to.eql([]);
       });
     });
+    it("insertItem() inserts a new item and resolved the new item with an id", () => {
+      const newItem = {
+        name: "Test new name",
+        price: "test new price",
+        category: "Test new category",
+        checked: true,
+        date_added: new Date("2020-01-01T00:00:00.000Z"),
+      };
+      return ShoppingService.insertItems(db, newItem);
+    });
   });
 });
