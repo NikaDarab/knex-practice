@@ -61,15 +61,24 @@ describe("Articles service object", function () {
         expect(actual).to.eql([]);
       });
     });
-    it("insertItem() inserts a new item and resolved the new item with an id", () => {
+    it("insertItema() inserts a new item and resolved the new item with an id", () => {
       const newItem = {
         name: "Test new name",
-        price: "test new price",
-        category: "Test new category",
+        price: "20.00",
+        category: "Main",
         checked: true,
         date_added: new Date("2020-01-01T00:00:00.000Z"),
       };
-      return ShoppingService.insertItems(db, newItem);
+      return ShoppingService.insertItems(db, newItem).then((actual) => {
+        expect(actual).to.eql({
+          id: 1,
+          name: newItem.name,
+          price: newItem.price,
+          category: newItem.category,
+          checked: newItem.checked,
+          date_added: newItem.date_added,
+        });
+      });
     });
   });
 });
