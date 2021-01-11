@@ -2,7 +2,7 @@ const ShoppingService = require("../src/shopping-list-service");
 const knex = require("knex");
 const { expect } = require("chai");
 
-describe(`Articles service object`, function () {
+describe("Articles service object", function () {
   let db;
   let testItems = [
     {
@@ -37,16 +37,28 @@ describe(`Articles service object`, function () {
     });
   });
   before(() => db("shopping_list").truncate());
-  before(() => {
-    return db.into("shopping_list").insert(testItems);
-  });
+  afterEach(() => db("shopping_list").truncate());
   after(() => db.destroy());
-  describe("Shopping-list service object", () => {
-    describe("getAllItems()", () => {
-      it("resolves all items from 'shopping_list table", () => {
-        return ShoppingService.getAllItems(db).then((actual) => {
-          expect(actual).to.eql(testItems);
-        });
+  context("Given 'shopping_list' has data", () => {
+    before(() => {
+      return db.into("shopping_list").insert(testItems);
+    });
+
+    it("getAllItems() resolves all items from 'shopping_list table", () => {
+      return ShoppingService.getAllItems(db).then((actual) => {
+        expect(actual).to.eql(
+          testItems.map((item) => ({
+            ...item,
+            date_added: new Date(item.date_added),
+          }))
+        );
+      });
+    });
+  });
+  context("Given 'shopping_list' has no data", () => {
+    it("getAllItems() resolved an empty array", () => {
+      return ShoppingService.getAllItems(db).then((actual) => {
+        expect(actual).to.eql([]);
       });
     });
   });
